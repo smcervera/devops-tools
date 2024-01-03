@@ -45,6 +45,31 @@ resource "kubernetes_persistent_volume" "jenkins_pv_local" {
   }
 }
 
+
+resource "kubernetes_persistent_volume" "postgres_pv_local" {
+  metadata {
+    name = "postgres-pv"
+    labels = {
+        "type" = "local"
+    }
+  }
+
+  spec {
+    storage_class_name = "manual"
+    access_modes       = ["ReadWriteOnce"]
+    capacity = {
+      storage = "8Gi"
+    }
+
+    persistent_volume_source {
+        host_path {
+            path = "/data/postgres-volume/"
+            type = ""
+        }
+    }
+  }
+}
+
 resource "kubernetes_storage_class" "jenkins_pv_local" {
   metadata {
     name = "jenkins-pv-local"
@@ -71,6 +96,21 @@ resource "kubernetes_persistent_volume_claim" "jenkins_pvc" {
     resources {
       requests = {
         storage = "10Gi"
+      }
+    }
+  }
+}
+
+resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
+  metadata {
+    name = "postgres-pvc"
+  }
+  spec {
+    storage_class_name = "manual"
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "8Gi"
       }
     }
   }

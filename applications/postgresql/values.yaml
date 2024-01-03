@@ -1,0 +1,8 @@
+postgresql:    
+  primary:
+   service:
+      type: NodePort
+    persistence:
+      existingClaim: postgres-pvc
+  volumePermissions:
+    enabled: true
