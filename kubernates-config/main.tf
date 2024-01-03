@@ -62,6 +62,21 @@ resource "helm_release" "argocd" {
   create_namespace = true
 }
 
+resource "kubernetes_persistent_volume_claim" "jenkins_pvc" {
+  metadata {
+    name = "jenkins-pvc-local"
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "10Gi"
+      }
+    }
+  }
+}
+
+
 resource "helm_release" "argocd-apps" {
   depends_on = [helm_release.argocd]
   chart      = "argocd-apps"

@@ -9,6 +9,9 @@ spec:
     repoURL: 'https://github.com/smcervera/devops-tools.git'
     targetRevision: HEAD
     path: applications/jenkins
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: jenkins
@@ -16,5 +19,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
     automated:
-      prune: false
-      selfHeal: false
+      prune: true
+      selfHeal: true
