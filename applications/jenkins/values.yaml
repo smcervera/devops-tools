@@ -1,4 +1,8 @@
 jenkins:
   controller:
+    servicePort: 8081
+    targetPort: 8081
     serviceType: NodePort
-    
+  persistence:
+    storageClass: jenkins-pv-local
+
