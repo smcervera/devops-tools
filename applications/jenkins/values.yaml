@@ -1,3 +1,5 @@
 jenkins-local:
+  controller:
+    serviceType: NodePort
   persistence:
-    existingClaim: jenkins-pvc-local
+    storageClass: jenkins-pv-local

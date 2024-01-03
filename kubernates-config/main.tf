@@ -22,24 +22,32 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "local" {
+resource "kubernetes_persistent_volume" "jenkins_pv_local" {
   metadata {
-    name = "devops"
+    name      = "jenkins-pv-local"
+    namespace = "jenkins"
+  }
+
+  spec {
+    storage_class_name = "jenkins-pv-local"
+    access_modes       = ["ReadWriteOnce"]
+    capacity {
+      storage = "11Gi"
+    }
+    persistent_volume_reclaim_policy = "Retain"
+    host_path {
+      path = "/data/jenkins-volume/"
+    }
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "jenkins_pvc" {
+resource "kubernetes_storage_class" "jenkins_pv_local" {
   metadata {
-    name = "jenkins-pvc-local"
+    name = "jenkins-pv-local"
   }
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    resources {
-      requests = {
-        storage = "10Gi"
-      }
-    }
-  }
+
+  provisioner           = "kubernetes.io/no-provisioner"
+  volume_binding_mode   = "WaitForFirstConsumer"
 }
 
 resource "helm_release" "argocd" {
