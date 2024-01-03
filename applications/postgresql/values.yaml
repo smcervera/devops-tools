@@ -1,6 +1,6 @@
 postgresql:    
   primary:
-   service:
+    service:
       type: NodePort
     persistence:
       existingClaim: postgres-pvc
