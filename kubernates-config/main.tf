@@ -24,19 +24,23 @@ provider "helm" {
 
 resource "kubernetes_persistent_volume" "jenkins_pv_local" {
   metadata {
-    name      = "jenkins-pv-local"
-    namespace = "jenkins"
+    name = "jenkins-pv-local"
   }
 
   spec {
     storage_class_name = "jenkins-pv-local"
     access_modes       = ["ReadWriteOnce"]
-    capacity {
+    capacity = {
       storage = "11Gi"
     }
     persistent_volume_reclaim_policy = "Retain"
-    host_path {
-      path = "/data/jenkins-volume/"
+
+    # persistent_volume_source is required, using an empty block for simplicity
+    persistent_volume_source {
+        host_path {
+            path = "/data/jenkins-volume/"
+            type = ""
+        }
     }
   }
 }
@@ -46,7 +50,7 @@ resource "kubernetes_storage_class" "jenkins_pv_local" {
     name = "jenkins-pv-local"
   }
 
-  provisioner           = "kubernetes.io/no-provisioner"
+  storage_provisioner   = "kubernetes.io/no-provisioner"
   volume_binding_mode   = "WaitForFirstConsumer"
 }
 
