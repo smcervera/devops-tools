@@ -9,10 +9,6 @@ spec:
     repoURL: 'https://github.com/smcervera/devops-tools.git'
     targetRevision: HEAD
     path: applications/jenkins
-    credentials:
-      secretName: git-secret
-      passwordKey: password
-      usernameKey: username
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: jenkins
