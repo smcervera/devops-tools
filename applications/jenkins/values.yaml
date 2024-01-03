@@ -1,0 +1,3 @@
+jenkins-local:
+  persistence:
+    existingClaim: jenkins-pvc-local

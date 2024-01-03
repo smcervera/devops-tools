@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook
+  namespace: argocd
+spec:
+  project: default
+  source:
+    path: guestbook
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/smcervera/devops-tools.git'
+    targetRevision: HEAD
+    path: applications/jenkins
+    credentials:
+      secretName: git-secret
+      passwordKey: password
+      usernameKey: username
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: jenkins
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
